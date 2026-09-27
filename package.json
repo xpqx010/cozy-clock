@@ -1,0 +1,46 @@
+{
+  "name": "cozy-clock",
+  "version": "1.0.0",
+  "description": "A small cozy clock that floats above your desktop.",
+  "main": "main.cjs",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "icon": "node scripts/generate-icon.cjs",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder --win nsis"
+  },
+  "devDependencies": {
+    "electron": "^38.1.2",
+    "electron-builder": "^26.0.12",
+    "png-to-ico": "^3.0.2",
+    "sharp": "^0.35.4"
+  },
+  "dependencies": {
+    "youtube-dl-exec": "^3.1.15"
+  },
+  "build": {
+    "appId": "com.cozyclock.app",
+    "productName": "Cozy Clock",
+    "files": [
+      "main.cjs",
+      "preload.cjs",
+      "src/**/*",
+      "assets/icon.png"
+    ],
+    "asarUnpack": [
+      "node_modules/youtube-dl-exec/bin/**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "Cozy Clock"
+    }
+  }
+}

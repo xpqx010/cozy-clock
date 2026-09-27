@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <title>Cozy Clock</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-theme="ember">
+  <main class="clock-shell" aria-label="Cozy Clock">
+    <img class="custom-wallpaper" id="custom-wallpaper" alt="" hidden>
+    <div class="wallpaper-shade" id="wallpaper-shade" aria-hidden="true"></div>
+    <svg class="elden-art" viewBox="0 0 430 250" preserveAspectRatio="none" aria-hidden="true">
+      <g class="rune-ring rune-ring-outer"><circle cx="215" cy="122" r="78"/><path d="M215 44v11M215 189v11M137 122h11M282 122h11"/></g>
+      <g class="rune-ring rune-ring-inner"><circle cx="215" cy="122" r="55"/><path d="m215 67 5 8-5 8-5-8ZM215 161l5 8-5 8-5-8Z"/></g>
+      <path class="erdtree-mark" d="M215 21v193M181 200c20-25 25-53 34-78 9 25 14 53 34 78M215 122c-12-19-31-33-53-39M215 122c12-19 31-33 53-39M215 82l-24-29M215 82l24-29M188 215h54"/>
+    </svg>
+    <div class="grace-motes" aria-hidden="true">
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    </div>
+    <div class="drag-strip" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <div class="date-wrap">
+        <span class="day" id="day">Sunday</span>
+        <span class="date" id="date">September 27</span>
+      </div>
+
+      <div class="window-actions">
+        <button class="icon-button pin is-active" id="pin" type="button" aria-label="Keep clock on top" aria-pressed="true" title="Keep on top">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 4.5 5 5-2.2 1.1-3.5 3.5.2 3-1 1-3.5-3.5-4 4-1-1 4-4L5 10l1-1 3 .2 3.5-3.5 1-2.2Z"/></svg>
+        </button>
+        <button class="icon-button" id="settings-button" type="button" aria-label="Open clock settings" aria-expanded="false" title="Settings">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10M14 4v6M6 14v6"/></svg>
+        </button>
+        <button class="icon-button" id="music-button" type="button" aria-label="Open music player" aria-expanded="false" title="Music player">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V6l10-2v12M9 9l10-2"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/></svg>
+        </button>
+        <button class="icon-button" id="minimize" type="button" aria-label="Minimize clock" title="Minimize">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg>
+        </button>
+        <button class="icon-button close" id="close" type="button" aria-label="Close clock" title="Close">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <section class="time" aria-live="off" aria-label="Current time">
+      <div class="period" id="period">AM</div>
+      <div class="digit-card" id="hour-card">
+        <span class="digits" id="hours">12</span>
+        <span class="hinge" aria-hidden="true"></span>
+      </div>
+      <span class="colon" aria-hidden="true"><i></i><i></i></span>
+      <div class="digit-card" id="minute-card">
+        <span class="digits" id="minutes">42</span>
+        <span class="hinge" aria-hidden="true"></span>
+      </div>
+      <div class="seconds" id="seconds">01</div>
+    </section>
+
+    <div class="footer-line">
+      <span class="greeting" id="greeting">Slow morning</span>
+      <span class="battery" id="battery" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h13v10H5zM18 10h2v4h-2"/></svg>
+        <span id="battery-level"></span>
+      </span>
+    </div>
+
+    <section class="music-player" id="music-player" aria-label="Music player" hidden>
+      <audio id="audio"></audio>
+      <div class="track-info">
+        <span class="track-label">Now playing</span>
+        <span class="track-title" id="track-title">Choose your music</span>
+      </div>
+      <div class="player-controls">
+        <button class="player-button" id="previous-track" type="button" aria-label="Previous track" title="Previous">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5v14M18 6l-9 6 9 6Z"/></svg>
+        </button>
+        <button class="player-button play" id="play-track" type="button" aria-label="Play" title="Play">
+          <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7Z"/></svg>
+          <svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg>
+        </button>
+        <button class="player-button" id="next-track" type="button" aria-label="Next track" title="Next">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 5v14M6 6l9 6-9 6Z"/></svg>
+        </button>
+      </div>
+      <label class="progress-control" aria-label="Track progress">
+        <span id="elapsed">0:00</span>
+        <input id="track-progress" type="range" min="0" max="100" value="0" step="0.1">
+      </label>
+      <div class="library-actions">
+        <button class="player-button" id="library-button" type="button" aria-label="Open music library" title="Music library">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14M5 12h14M5 18h9"/><circle cx="18" cy="18" r="2"/></svg>
+        </button>
+        <button class="player-button" id="music-close" type="button" aria-label="Close music player" title="Hide player">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <aside class="library-panel" id="library-panel" aria-labelledby="library-title" hidden>
+      <div class="library-heading">
+        <div>
+          <span class="eyebrow">Your soundscape</span>
+          <h2 id="library-title">Music library <small id="track-count">0 tracks</small></h2>
+        </div>
+        <button class="icon-button" id="library-close" type="button" aria-label="Close music library">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg>
+        </button>
+      </div>
+      <div class="library-imports">
+        <button id="add-music" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 9l5-5 5 5M5 19h14"/></svg>
+          Add files
+        </button>
+        <button id="youtube-music" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.1.1l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1M14 11a5 5 0 0 0-7.1-.1l-2 2A5 5 0 0 0 12 20l1.1-1.1"/></svg>
+          YouTube link
+        </button>
+      </div>
+      <div class="library-empty" id="library-empty">
+        <span class="empty-disc" aria-hidden="true"></span>
+        <strong>No music yet</strong>
+        <span>Add a song from your computer or YouTube.</span>
+      </div>
+      <ol class="track-list" id="track-list" aria-label="Saved tracks"></ol>
+    </aside>
+
+    <aside class="youtube-panel" id="youtube-panel" aria-labelledby="youtube-title" hidden>
+      <div class="youtube-heading">
+        <div><span class="eyebrow">Add to your library</span><h2 id="youtube-title">YouTube to music</h2></div>
+        <button class="icon-button" id="youtube-close" type="button" aria-label="Close YouTube importer">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg>
+        </button>
+      </div>
+      <form id="youtube-form">
+        <label for="youtube-url">YouTube video link</label>
+        <div class="url-entry">
+          <input id="youtube-url" type="url" inputmode="url" placeholder="https://youtu.be/..." required autocomplete="off">
+          <button id="youtube-download" type="submit">Download</button>
+        </div>
+        <p class="download-status" id="download-status" role="status">Use only videos you own or have permission to download.</p>
+      </form>
+    </aside>
+
+    <aside class="settings-panel" id="settings-panel" aria-label="Clock settings" hidden>
+      <div class="settings-heading">
+        <div><span class="eyebrow">Make it yours</span><h2>Clock settings</h2></div>
+        <button class="icon-button" id="settings-close" type="button" aria-label="Close settings">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg>
+        </button>
+      </div>
+
+      <div class="setting-row">
+        <span>24-hour time</span>
+        <button class="switch" id="hour24" type="button" role="switch" aria-checked="false"><span></span></button>
+      </div>
+      <div class="setting-row">
+        <span>Show seconds</span>
+        <button class="switch" id="showSeconds" type="button" role="switch" aria-checked="false"><span></span></button>
+      </div>
+      <div class="setting-row">
+        <span>Show date</span>
+        <button class="switch" id="showDate" type="button" role="switch" aria-checked="true"><span></span></button>
+      </div>
+
+      <fieldset class="themes">
+        <legend>Theme</legend>
+        <button type="button" class="theme-swatch ember is-selected" data-theme="ember" aria-label="Ember theme"></button>
+        <button type="button" class="theme-swatch sage" data-theme="sage" aria-label="Sage theme"></button>
+        <button type="button" class="theme-swatch dusk" data-theme="dusk" aria-label="Dusk theme"></button>
+        <button type="button" class="theme-swatch elden" data-theme="elden" aria-label="Elden Ring theme"></button>
+        <span class="theme-name" id="theme-name">Ember</span>
+      </fieldset>
+      <button class="personalize-button" id="personalize-button" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17.5V20h2.5L18 8.5 15.5 6 4 17.5ZM14 7.5l2.5 2.5M14.5 4.5 17 2l5 5-2.5 2.5"/></svg>
+        Custom wallpaper, color and font
+      </button>
+    </aside>
+
+    <aside class="personalize-panel" id="personalize-panel" aria-labelledby="personalize-title" hidden>
+      <div class="personalize-heading">
+        <div><span class="eyebrow">Make it personal</span><h2 id="personalize-title">Your clock style</h2></div>
+        <button class="icon-button" id="personalize-close" type="button" aria-label="Close personalization">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg>
+        </button>
+      </div>
+
+      <div class="personalize-preview" aria-label="Live clock style preview">
+        <img id="preview-wallpaper" alt="" hidden>
+        <span class="preview-shade" id="preview-shade" aria-hidden="true"></span>
+        <span class="preview-day" id="preview-day">Sunday</span>
+        <span class="preview-time"><b id="preview-hours">12</b><i>:</i><b id="preview-minutes">42</b></span>
+        <span class="preview-label">LIVE PREVIEW</span>
+      </div>
+
+      <div class="wallpaper-control">
+        <button class="wallpaper-upload" id="wallpaper-upload" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4zM7 15l3-3 2 2 2-2 3 3M16.5 8.5h.01"/></svg>
+          <span><strong>Choose photo or GIF</strong><small id="wallpaper-status">JPG, PNG, WEBP or animated GIF</small></span>
+        </button>
+        <button class="remove-wallpaper" id="wallpaper-remove" type="button" aria-label="Remove wallpaper" title="Remove wallpaper" disabled>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M9 7V4h6v3M8 7l1 13h6l1-13"/></svg>
+        </button>
+      </div>
+
+      <label class="custom-field" for="clock-font">
+        <span>Number style</span>
+        <select id="clock-font">
+          <option value="rounded">Cozy rounded</option>
+          <option value="serif">Storybook serif</option>
+          <option value="digital">Digital display</option>
+          <option value="mono">Clean mono</option>
+        </select>
+      </label>
+
+      <div class="custom-field">
+        <span>Number panels</span>
+        <div class="panel-options" role="group" aria-label="Number panel strength">
+          <button type="button" data-panels="full" aria-pressed="true">Full</button>
+          <button type="button" data-panels="soft" aria-pressed="false">Soft</button>
+          <button type="button" data-panels="none" aria-pressed="false">None</button>
+        </div>
+      </div>
+
+      <label class="custom-field" for="clock-color">
+        <span>Clock color</span>
+        <span class="color-control"><input id="clock-color" type="color" value="#ed795f"><output id="color-value">#ED795F</output></span>
+      </label>
+
+      <label class="custom-field dim-field" for="wallpaper-dim">
+        <span>Wallpaper darkness</span>
+        <span class="range-control"><input id="wallpaper-dim" type="range" min="0" max="80" value="45"><output id="dim-value">45%</output></span>
+      </label>
+    </aside>
+  </main>
+  <script src="renderer.js"></script>
+</body>
+</html>
