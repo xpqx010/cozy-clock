@@ -22,12 +22,18 @@
     <div class="drag-strip" aria-hidden="true"></div>
 
     <header class="topbar">
-      <div class="date-wrap">
+      <div class="date-wrap" data-layout-key="date">
         <span class="day" id="day">Sunday</span>
         <span class="date" id="date">September 27</span>
       </div>
 
       <div class="window-actions">
+        <button class="icon-button" id="hud-button" type="button" aria-label="Enter minimal HUD" title="Minimal HUD (Ctrl+Shift+H)">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V4h4M16 4h4v4M20 16v4h-4M8 20H4v-4M8 12h8"/></svg>
+        </button>
+        <button class="icon-button" id="pomodoro-button" type="button" aria-label="Open focus timer" aria-pressed="false" title="Focus timer">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 2h6M12 6v2M18.4 5.6l-1.5 1.5"/><circle cx="12" cy="14" r="7"/></svg>
+        </button>
         <button class="icon-button pin is-active" id="pin" type="button" aria-label="Keep clock on top" aria-pressed="true" title="Keep on top">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 4.5 5 5-2.2 1.1-3.5 3.5.2 3-1 1-3.5-3.5-4 4-1-1 4-4L5 10l1-1 3 .2 3.5-3.5 1-2.2Z"/></svg>
         </button>
@@ -46,7 +52,7 @@
       </div>
     </header>
 
-    <section class="time" aria-live="off" aria-label="Current time">
+    <section class="time" aria-live="off" aria-label="Current time" data-layout-key="time">
       <div class="period" id="period">AM</div>
       <div class="digit-card" id="hour-card">
         <span class="digits" id="hours">12</span>
@@ -57,12 +63,29 @@
         <span class="digits" id="minutes">42</span>
         <span class="hinge" aria-hidden="true"></span>
       </div>
-      <div class="seconds" id="seconds">01</div>
+      <div class="seconds" id="seconds" data-layout-key="seconds">01</div>
+    </section>
+
+    <section class="pomodoro-panel" id="pomodoro-panel" aria-label="Pomodoro focus timer" hidden>
+      <div class="pomodoro-topline">
+        <span id="pomodoro-mode">Focus session</span>
+        <span id="pomodoro-rounds">0 / 4</span>
+      </div>
+      <div class="pomodoro-time" id="pomodoro-time">25:00</div>
+      <div class="pomodoro-actions">
+        <button id="pomodoro-reset" type="button">Reset</button>
+        <button class="pomodoro-start" id="pomodoro-start" type="button">Start</button>
+        <button id="pomodoro-skip" type="button">Skip</button>
+      </div>
+      <div class="pomodoro-config">
+        <label>Focus <input id="pomodoro-work" type="number" min="1" max="120" value="25"> min</label>
+        <label>Break <input id="pomodoro-break" type="number" min="1" max="60" value="5"> min</label>
+      </div>
     </section>
 
     <div class="footer-line">
-      <span class="greeting" id="greeting">Slow morning</span>
-      <span class="battery" id="battery" hidden>
+      <span class="weather" id="weather" data-layout-key="weather">Set weather in Settings</span>
+      <span class="battery" id="battery" data-layout-key="battery" hidden>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h13v10H5zM18 10h2v4h-2"/></svg>
         <span id="battery-level"></span>
       </span>
@@ -165,6 +188,23 @@
         <span>Show date</span>
         <button class="switch" id="showDate" type="button" role="switch" aria-checked="true"><span></span></button>
       </div>
+      <div class="setting-row size-setting">
+        <span>Clock size</span>
+        <div class="size-options" role="group" aria-label="Compact clock size">
+          <button type="button" data-window-size="small" aria-pressed="false">S</button>
+          <button type="button" data-window-size="medium" aria-pressed="true">M</button>
+          <button type="button" data-window-size="large" aria-pressed="false">L</button>
+        </div>
+      </div>
+      <form class="weather-form" id="weather-form">
+        <label for="weather-city">Weather city</label>
+        <div><input id="weather-city" type="text" maxlength="80" placeholder="Example: Doha" autocomplete="off"><button type="submit">Set</button></div>
+        <span id="weather-status">Location is entered manually and stays local.</span>
+        <div class="unit-options" role="group" aria-label="Temperature unit">
+          <button type="button" data-weather-unit="celsius" aria-pressed="true">C</button>
+          <button type="button" data-weather-unit="fahrenheit" aria-pressed="false">F</button>
+        </div>
+      </form>
 
       <fieldset class="themes">
         <legend>Theme</legend>
@@ -229,13 +269,52 @@
         <span>Clock color</span>
         <span class="color-control"><input id="clock-color" type="color" value="#ed795f"><output id="color-value">#ED795F</output></span>
       </label>
+      <div class="color-suggestions" id="color-suggestions" hidden>
+        <span>Wallpaper suggestions</span>
+        <div id="suggested-colors"></div>
+      </div>
 
       <label class="custom-field dim-field" for="wallpaper-dim">
         <span>Wallpaper darkness</span>
         <span class="range-control"><input id="wallpaper-dim" type="range" min="0" max="80" value="45"><output id="dim-value">45%</output></span>
       </label>
+
+      <div class="custom-section-label">Minimal HUD appearance</div>
+      <label class="custom-field" for="hud-color">
+        <span>HUD digit color</span>
+        <span class="color-control"><input id="hud-color" type="color" value="#f5eadc"><output id="hud-color-value">#F5EADC</output></span>
+      </label>
+      <label class="custom-field" for="hud-opacity">
+        <span>HUD opacity</span>
+        <span class="range-control"><input id="hud-opacity" type="range" min="10" max="100" value="100"><output id="hud-opacity-value">100%</output></span>
+      </label>
+
+      <div class="layout-editor-control">
+        <div><strong>Arrange clock elements</strong><small>Drag highlighted items on the live clock.</small></div>
+        <button id="layout-editor-toggle" type="button" aria-pressed="false">Arrange</button>
+        <button id="layout-reset" type="button">Reset</button>
+      </div>
+
+      <section class="saved-styles" aria-labelledby="saved-styles-title">
+        <div class="saved-styles-heading">
+          <span id="saved-styles-title">Saved layouts</span>
+          <small id="preset-count">0 saved</small>
+        </div>
+        <form class="save-preset" id="save-preset-form">
+          <input id="preset-name" type="text" maxlength="40" placeholder="Layout name" aria-label="New layout name" required>
+          <button type="submit">Save current</button>
+        </form>
+        <div class="preset-note">Wallpaper or GIF included automatically</div>
+        <div class="preset-empty" id="preset-empty">Save this complete layout to switch back to it later.</div>
+        <ul class="preset-list" id="preset-list" aria-label="Saved clock layouts"></ul>
+      </section>
     </aside>
+    <div class="quick-resize" aria-label="Quick clock size controls">
+      <button id="resize-smaller" type="button" aria-label="Make clock smaller" title="Make clock smaller">−</button>
+      <button id="resize-larger" type="button" aria-label="Make clock larger" title="Make clock larger">+</button>
+    </div>
   </main>
+  <div class="native-resize-handle" aria-hidden="true"></div>
   <script src="renderer.js"></script>
 </body>
 </html>

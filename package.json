@@ -1,6 +1,6 @@
 {
   "name": "cozy-clock",
-  "version": "1.0.0",
+  "version": "1.6.0",
   "description": "A small cozy clock that floats above your desktop.",
   "main": "main.cjs",
   "private": true,
@@ -26,6 +26,7 @@
     "files": [
       "main.cjs",
       "preload.cjs",
+      "hud-preload.cjs",
       "src/**/*",
       "assets/icon.png"
     ],

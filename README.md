@@ -11,6 +11,14 @@ A compact, customizable desktop clock for Windows. It floats above other windows
 - Adjustable clock color, font, wallpaper darkness, and number panels
 - Persistent local music library with playback controls
 - Local file import and optional YouTube audio import
+- Pomodoro focus and break timer with desktop notifications
+- City-based current weather powered by Open-Meteo
+- Automatic readable color suggestions from custom wallpapers
+- Drag-and-save positioning for clock elements
+- Click-through minimal HUD for watching videos (`Ctrl+Shift+H`)
+- Directly draggable HUD with hover-wheel sizing and double-right-click exit
+- Independent HUD digit color and opacity controls
+- Complete saved layouts with their own wallpaper or GIF copy
 - Custom Windows app and installer icon
 
 All wallpapers, music, and preferences stay on the user's computer.
